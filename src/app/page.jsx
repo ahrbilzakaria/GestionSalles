@@ -16,7 +16,7 @@ export default function Home() {
           meeting spaces with our user-friendly system
         </p>
         <Button asChild className="text-2xl" size="lg">
-          <Link href="/dashboard/home">Get Started</Link>
+          <Link href="/signup">Get Started</Link>
         </Button>
       </div>
       {/* Background components */}
