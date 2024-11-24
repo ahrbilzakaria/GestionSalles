@@ -1,8 +1,5 @@
 "use client"; // Mark the component as client-side
 
-import { DateDisplay } from "@/app/components/ui/date-display";
-import { RoomOccupancyChart } from "@/app/components/ui/room-chart";
-import { RoomCounter } from "@/app/components/ui/room-counter";
 import {
   Card,
   CardContent,
@@ -10,8 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { SidebarSeparator } from "@/components/ui/sidebar";
-import { Separator } from "@radix-ui/react-separator";
+
 import { useState, useEffect } from "react";
 
 export default function Home() {
@@ -61,21 +57,8 @@ export default function Home() {
   return (
     <div>
       <div className="flex flex-1 flex-col gap-4 p-4">
-        <h1 className="font-bold text-3xl">
-          <span className="font-medium">Welcome,</span> {token?.username}
-        </h1>
-        <div className="grid h-fit auto-rows-min gap-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 ">
-          <DateDisplay></DateDisplay>
+        <h1 className="font-bold text-3xl">Manage Filiere :</h1>
 
-          <RoomCounter
-            title={"Total Rooms"}
-            totalRooms={56}
-            comment={"2 rooms currently unavailable"}
-          ></RoomCounter>
-
-          <RoomCounter title={"Specialties"} totalRooms={12}></RoomCounter>
-        </div>
-        <SidebarSeparator></SidebarSeparator>
         <div className="min-h-[100vh] flex-1 rounded-xl  md:min-h-min">
           <Card className="h-full w-full bg-muted/50">
             <CardHeader>

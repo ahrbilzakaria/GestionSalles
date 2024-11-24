@@ -24,6 +24,7 @@ export function LoginForm() {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false); // Loading state
   const [userCreated, setUserCreated] = useState(false);
 
   const handleInputChange = (e) => {
@@ -34,7 +35,7 @@ export function LoginForm() {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Validation
     if (!formData.email || !formData.email.includes("@")) {
       toast({
@@ -53,13 +54,11 @@ export function LoginForm() {
       return;
     }
 
-    console.log("User Payload:", formData);
-    handleLogin();
-  };
-
-  const handleLogin = async () => {
+    setLoading(true); // Set loading to true when login starts
     try {
-      const result = await login(formData);
+      const result = await login(formData); // Assuming `login` throws errors on failure
+      const data = JSON.stringify(result, null, 2);
+      localStorage.setItem("userToken", data);
       setFormData({
         email: "",
         password: "",
@@ -69,23 +68,33 @@ export function LoginForm() {
         description: "You are logged in!",
         variant: "",
       });
-      setUserCreated(true);
-      localStorage.setItem("user", result); // Set state to true when user is created
+
+      setUserCreated(true); // Set state to navigate
     } catch (error) {
-      toast({
-        title: "Error!",
-        description: "Couldn't login!",
-        variant: "destructive",
-      });
+      if (error.response && error.response.status === 401) {
+        toast({
+          title: "Invalid Credentials",
+          description:
+            "Either your email or password is incorrect. Please try again.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error!",
+          description: "Couldn't login! Please try again later.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setLoading(false); // Reset loading state after login attempt
     }
   };
 
-  // Use useEffect to navigate after the user is created
   useEffect(() => {
     if (userCreated) {
-      router.push("/dashboard/home"); // Redirect to home page if user is created
+      router.push("/dashboard/home");
     }
-  }, [userCreated, router]); // Dependency on userCreated and router to trigger effect
+  }, [userCreated, router]);
 
   return (
     <Card className="mx-auto max-w-sm">
@@ -121,9 +130,22 @@ export function LoginForm() {
               required
             />
           </div>
-          <Button type="submit" className="w-full" onClick={handleSubmit}>
-            Login
-          </Button>
+
+          {loading ? (
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loading}
+              loading
+              // Disable button while loading
+            >
+              Login
+            </Button>
+          ) : (
+            <Button type="submit" className="w-full" onClick={handleSubmit}>
+              Login
+            </Button>
+          )}
         </div>
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}

@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { GalleryVerticalEnd, GraduationCap } from "lucide-react";
+import { GalleryVerticalEnd, GraduationCap, LogOut } from "lucide-react";
 
 import {
   Sidebar,
@@ -16,8 +16,9 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { NavUser } from "./ui/nav-user";
+import { Button } from "@/app/components/ui/button";
 
 const user = {
   name: "shadcn",
@@ -29,7 +30,6 @@ const data = {
   navMain: [
     {
       title: "Management",
-      url: "/dashboard/home",
       items: [
         {
           title: "Overview",
@@ -37,15 +37,20 @@ const data = {
         },
         {
           title: "Manage Filieres",
-          url: "/mf",
+          url: "/dashboard/manage-filiere",
         },
         {
           title: "Manage Rooms",
           url: "/mr",
         },
+      ],
+    },
+    {
+      title: "Operations",
+      items: [
         {
           title: "Reservation Requests",
-          url: "rr",
+          url: "/rr",
         },
         {
           title: "Schedules",
@@ -59,10 +64,20 @@ const data = {
           title: "Conflict Resolution",
           url: "/rs",
         },
+      ],
+    },
+    {
+      title: "Analytics",
+      items: [
         {
           title: "Reports and Analytics",
           url: "/raa",
         },
+      ],
+    },
+    {
+      title: "User",
+      items: [
         {
           title: "My Reservations",
           url: "/r",
@@ -78,6 +93,10 @@ const data = {
 
 export function AppSidebar({ ...props }) {
   const router = usePathname();
+  const out = useRouter();
+  const handleRefresh = () => {
+    out.push("/");
+  };
   const isActive = (url) => router === url;
   return (
     <Sidebar {...props}>
@@ -135,7 +154,17 @@ export function AppSidebar({ ...props }) {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>{/* <NavUser user={user} /> */}</SidebarFooter>
+      <SidebarFooter>
+        <Button
+          onClick={() => {
+            localStorage.removeItem("userToken");
+            handleRefresh();
+          }}
+        >
+          <LogOut></LogOut> Sign out
+        </Button>
+        {/* <NavUser user={user} /> */}
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

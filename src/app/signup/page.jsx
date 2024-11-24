@@ -1,4 +1,5 @@
 import { SignUpForm } from "@/components/signup-form";
+import { Toaster } from "@/components/ui/toaster";
 import Link from "next/link";
 import React from "react";
 
@@ -15,6 +16,7 @@ export default function page() {
         </Link>
       </div>
       <SignUpForm></SignUpForm>
+      <Toaster></Toaster>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { toast } from "@/hooks/use-toast";
 import axiosUsersInstance from "./services/axiosUsersInstance";
 
 export const signUp = async (payload) => {
@@ -25,7 +26,7 @@ export const login = async (payload) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error sending data:", error);
+    //console.error("Error sending data:", error);
     throw error;
   }
 };
