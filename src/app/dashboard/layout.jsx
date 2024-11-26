@@ -10,10 +10,14 @@ import {
 import { Toaster } from "@/components/ui/toaster";
 import withAuth from "./withauth";
 
+// Import the FiliereProvider
+// Ensure correct path
+
 function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="h-full">
+        {/* Wrap everything inside FiliereProvider */}
         <SidebarProvider>
           <AppSidebar />
           <SidebarInset>
@@ -22,10 +26,10 @@ function RootLayout({ children }) {
                 <SidebarTrigger />
               </div>
             </header>
-            {children}
+            {children} {/* Child pages can now access the FiliereContext */}
           </SidebarInset>
         </SidebarProvider>
-        <Toaster></Toaster>
+        <Toaster /> {/* Toast notifications will also be available */}
       </body>
     </html>
   );

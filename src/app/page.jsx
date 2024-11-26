@@ -2,6 +2,7 @@ import Link from "next/link";
 import Nav from "./components/Nav";
 import { BackgroundBeams } from "./components/ui/background-beams";
 import { Button } from "./components/ui/button";
+import ButtonGetStarted from "./components/buttonGetStarted";
 
 export default function Home() {
   return (
@@ -15,9 +16,7 @@ export default function Home() {
           Streamline the scheduling and management of classrooms, labs, and
           meeting spaces with our user-friendly system
         </p>
-        <Button asChild className="text-2xl" size="lg">
-          <Link href="/signup">Get Started</Link>
-        </Button>
+        <ButtonGetStarted></ButtonGetStarted>
       </div>
       {/* Background components */}
       <BackgroundBeams className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none" />

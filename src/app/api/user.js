@@ -18,7 +18,6 @@ export const signUp = async (payload) => {
 
 export const login = async (payload) => {
   try {
-    console.log("api", payload);
     const response = await axiosUsersInstance.post("/login", payload, {
       headers: {
         "Content-Type": "application/json", // Ensure content type is set to JSON

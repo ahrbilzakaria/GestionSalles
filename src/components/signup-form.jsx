@@ -38,6 +38,7 @@ export function SignUpForm() {
   });
 
   const [userCreated, setUserCreated] = useState(false); // State to track if the user is created
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -94,6 +95,7 @@ export function SignUpForm() {
   };
 
   const handleSignUp = async () => {
+    setLoading(true);
     try {
       const result = await signUp(formData);
       setFormData({
@@ -115,6 +117,8 @@ export function SignUpForm() {
         description: "Couldn't sign up!",
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -122,7 +126,7 @@ export function SignUpForm() {
     return (
       <div className="w-screen h-screen flex justify-center items-start">
         <TextGenerateEffect
-          className={"p-10"}
+          className={"p-10 text-center"}
           duration={2}
           filter={false}
           words={words}
@@ -198,9 +202,21 @@ export function SignUpForm() {
             </Select>
           </div>
 
-          <Button type="button" className="w-full" onClick={handleSubmit}>
-            Sign up
-          </Button>
+          {loading ? (
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loading}
+              loading
+              // Disable button while loading
+            >
+              Sign up
+            </Button>
+          ) : (
+            <Button type="submit" className="w-full" onClick={handleSubmit}>
+              Sign up
+            </Button>
+          )}
         </div>
         <div className="mt-4 text-center text-sm">
           You have an account?{" "}

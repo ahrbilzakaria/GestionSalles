@@ -59,6 +59,8 @@ export function LoginForm() {
       const result = await login(formData); // Assuming `login` throws errors on failure
       const data = JSON.stringify(result, null, 2);
       localStorage.setItem("userToken", data);
+      localStorage.setItem("userEmail", data.email);
+      localStorage.setItem("authToken", data.verificationToken);
       setFormData({
         email: "",
         password: "",
