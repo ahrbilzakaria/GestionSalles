@@ -17,13 +17,21 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { usePathname, useRouter } from "next/navigation";
-import { NavUser } from "./ui/nav-user";
 import { Button } from "@/app/components/ui/button";
 
-const user = {
-  name: "shadcn",
-  email: "m@example.com",
-  avatar: "/shadcn.jpg",
+// Utility function to get cookies by name
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    const cookieValue = parts.pop().split(";").shift();
+    try {
+      return JSON.parse(cookieValue); // Parse the cookie value as JSON
+    } catch (e) {
+      return null; // In case the cookie is not a valid JSON
+    }
+  }
+  return null;
 };
 
 const data = {
@@ -94,10 +102,24 @@ const data = {
 export function AppSidebar({ ...props }) {
   const router = usePathname();
   const out = useRouter();
+  const [user, setUser] = React.useState(null);
+
+  // Check for user token in cookies and update user state
+  React.useEffect(() => {
+    const userToken = getCookie("userToken"); // Read user token from cookies
+    if (userToken) {
+      setUser(userToken); // Set user data if token is found
+    } else {
+      out.push("/login"); // Redirect to login if no user token
+    }
+  }, [out]);
+
   const handleRefresh = () => {
-    out.push("/");
+    out.push("/"); // Reload the page
   };
+
   const isActive = (url) => router === url;
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -110,7 +132,6 @@ export function AppSidebar({ ...props }) {
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold">
-                    {" "}
                     G-SALLES
                     <span className="font-light text-sm text-muted-foreground">
                       {" "}
@@ -157,13 +178,13 @@ export function AppSidebar({ ...props }) {
       <SidebarFooter>
         <Button
           onClick={() => {
-            localStorage.removeItem("userToken");
-            handleRefresh();
+            document.cookie =
+              "userToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"; // Remove the cookie
+            handleRefresh(); // Redirect to home
           }}
         >
-          <LogOut></LogOut> Sign out
+          <LogOut /> Sign out
         </Button>
-        {/* <NavUser user={user} /> */}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

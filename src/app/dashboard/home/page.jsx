@@ -14,8 +14,24 @@ import { SidebarSeparator } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
 import { useState, useEffect } from "react";
 
+// Helper function to retrieve a cookie value by name
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    const cookieValue = parts.pop().split(";").shift();
+    try {
+      return JSON.parse(cookieValue); // Parse the cookie value as JSON
+    } catch (e) {
+      return null; // In case the cookie is not a valid JSON
+    }
+  }
+  return null;
+};
+
 export default function Home() {
   const [token, setToken] = useState(null);
+
   const freeRooms = [
     {
       Title: "k01",
@@ -50,11 +66,10 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    // Retrieve the token from localStorage after the component has mounted
-    const storedToken = localStorage.getItem("userToken");
+    // Retrieve the token from cookies after the component has mounted
+    const storedToken = getCookie("userToken");
     if (storedToken) {
-      setToken(JSON.parse(storedToken));
-      console.log(JSON.parse(storedToken));
+      setToken(storedToken); // Parse the token if it's a JSON string
     }
   }, []); // The empty dependency array ensures this runs only once
 

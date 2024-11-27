@@ -42,7 +42,7 @@ export default function Home() {
             <CardHeader>
               <CardTitle>Account</CardTitle>
               <CardDescription>
-                Make changes to your account here. Click save when you're done.
+                Make changes to your account here. Click save when you are done.
               </CardDescription>
             </CardHeader>
             <CardContent className=" flex gap-2 flex-wrap items-center">

@@ -35,6 +35,14 @@ export function LoginForm() {
     }));
   };
 
+  const setCookie = (name, value, days) => {
+    const expires = new Date();
+    expires.setDate(expires.getDate() + days);
+    document.cookie = `${name}=${JSON.stringify(
+      value
+    )}; expires=${expires.toUTCString()}; path=/; Secure; SameSite=Strict`;
+  };
+
   const handleSubmit = async () => {
     // Validation
     if (!formData.email || !formData.email.includes("@")) {
@@ -57,14 +65,17 @@ export function LoginForm() {
     setLoading(true); // Set loading to true when login starts
     try {
       const result = await login(formData); // Assuming `login` throws errors on failure
-      const data = JSON.stringify(result, null, 2);
-      localStorage.setItem("userToken", data);
-      localStorage.setItem("userEmail", data.email);
-      localStorage.setItem("authToken", data.verificationToken);
+
+      // Save token and user info in cookies
+      setCookie("userToken", result, 7); // Expires in 7 days
+      setCookie("userEmail", result.email, 7);
+      setCookie("authToken", result.verificationToken, 7);
+
       setFormData({
         email: "",
         password: "",
       });
+
       toast({
         title: "Done!",
         description: "You are logged in!",
@@ -73,17 +84,28 @@ export function LoginForm() {
 
       setUserCreated(true); // Set state to navigate
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        toast({
-          title: "Invalid Credentials",
-          description:
-            "Either your email or password is incorrect. Please try again.",
-          variant: "destructive",
-        });
+      if (error.response) {
+        if (error.response.status === 401) {
+          toast({
+            title: "Invalid Credentials",
+            description:
+              "Either your email or password is incorrect. Please try again.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Error!",
+            description:
+              error.response.data?.message ||
+              "An unknown error occurred. Please try again later.",
+            variant: "destructive",
+          });
+        }
       } else {
         toast({
           title: "Error!",
-          description: "Couldn't login! Please try again later.",
+          description:
+            "Couldn't connect to the server. Please try again later.",
           variant: "destructive",
         });
       }
@@ -134,17 +156,11 @@ export function LoginForm() {
           </div>
 
           {loading ? (
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loading}
-              loading
-              // Disable button while loading
-            >
+            <Button type="button" className="w-full" disabled={loading} loading>
               Login
             </Button>
           ) : (
-            <Button type="submit" className="w-full" onClick={handleSubmit}>
+            <Button type="button" className="w-full" onClick={handleSubmit}>
               Login
             </Button>
           )}

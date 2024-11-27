@@ -4,16 +4,33 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { LogOut } from "lucide-react";
 
+// Helper function to get a cookie value by name
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    const cookieValue = parts.pop().split(";").shift();
+    try {
+      return JSON.parse(cookieValue); // Parse the cookie value as JSON
+    } catch (e) {
+      return null; // In case the cookie is not a valid JSON
+    }
+  }
+  return null;
+};
+
 export default function Nav() {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("userToken");
+    const token = getCookie("userToken"); // Check for userToken in cookies
     setIsAuthorized(!!token); // Update state based on token presence
   }, []); // Runs once on component mount
 
   const handleSignOut = () => {
-    localStorage.removeItem("userToken"); // Clear token from storage
+    // Clear the token by setting an expired cookie
+    document.cookie =
+      "userToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     window.location.reload(); // Trigger a full page reload
   };
 
