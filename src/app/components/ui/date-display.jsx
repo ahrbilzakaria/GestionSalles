@@ -26,7 +26,7 @@ export function DateDisplay() {
   }, [currentDate]);
 
   return (
-    <Card className="aspect-video ">
+    <Card className="md:aspect-video ">
       <CardHeader>
         <CardTitle className="text-2xl font-normal text-start">
           Current Date :

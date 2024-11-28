@@ -1,40 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense } from "react";
+import ViewFilierPage from "./ViewFilierePage";
 
-// Utility function to get cookies by name (client-side)
-const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    const cookieValue = parts.pop().split(";").shift();
-    try {
-      return JSON.parse(cookieValue); // Parse the cookie value as JSON
-    } catch (e) {
-      return null; // In case the cookie is not a valid JSON
-    }
-  }
-  return null;
-};
-
-export default function withAuth(Component) {
-  return function ProtectedComponent(props) {
-    const router = useRouter();
-    const [isAuthorized, setIsAuthorized] = useState(false); // Manage auth state
-
-    useEffect(() => {
-      const token = getCookie("userToken"); // Read user token from cookies
-
-      if (!token) {
-        router.push("/login"); // Redirect unauthorized users to the login page
-      } else {
-        setIsAuthorized(true); // Allow authorized users to access the page
-      }
-    }, [router]);
-
-    if (!isAuthorized) {
-      // Show a loading spinner or blank page while checking auth status
-      return (
+export default function Home() {
+  return (
+    <Suspense
+      fallback={
         <div
           role="status"
           className="w-screen h-screen flex justify-center items-center"
@@ -56,10 +27,9 @@ export default function withAuth(Component) {
             />
           </svg>
         </div>
-      );
-    }
-
-    // Render the protected component for authorized users
-    return <Component {...props} />;
-  };
+      }
+    >
+      <ViewFilierPage></ViewFilierPage>
+    </Suspense>
+  );
 }

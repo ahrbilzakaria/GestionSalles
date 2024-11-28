@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button"; // Import your button component
 import { useToast } from "@/hooks/use-toast";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Eye, Trash } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const ActionsCell = ({ filiere }) => {
@@ -21,11 +22,10 @@ const ActionsCell = ({ filiere }) => {
   const { toast } = useToast();
 
   const handleEdit = () => {
-    router.push(
-      `/dashboard/manage-filiere/edit?name=${encodeURIComponent(
-        filiere.name
-      )}&capacity=${filiere.capacity}&id=${filiere.id}`
-    );
+    router.push(`/dashboard/manage-filiere/edit?id=${filiere.id}`);
+  };
+  const handleView = () => {
+    router.push(`/dashboard/manage-filiere/view?id=${filiere.id}`);
   };
 
   const handleDelete = async () => {
@@ -78,6 +78,9 @@ const ActionsCell = ({ filiere }) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <Button className="" variant="" size="sm" onClick={handleView}>
+        <Eye></Eye>
+      </Button>
     </div>
   );
 };
