@@ -20,7 +20,7 @@ export function DataTable({ columns, data }) {
   });
 
   return (
-    <div className="rounded-md border max-w-full">
+    <div className="rounded-md  max-w-full max-h-[32rem]">
       <Table className="table-auto">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

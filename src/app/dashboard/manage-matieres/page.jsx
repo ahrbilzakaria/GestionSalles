@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { addMatiere, getAllMatieres } from "@/app/api/matieres";
 
 // Utility function to get cookies by name
 const getCookie = (name) => {
@@ -38,37 +39,37 @@ const getCookie = (name) => {
 };
 
 export default function Home() {
-  const [filieres, setFilieres] = useState([]);
-  const [filiere, setFiliere] = useState({
+  const [matieres, setMatieres] = useState([]);
+  const [matiere, setMatiere] = useState({
+    id: "",
     name: "",
-    capacity: 0,
   });
   const [isAdded, setIsAdded] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
   // Function to load filieres data
-  const loadFiliers = async () => {
+  const loadMatieres = async () => {
     try {
-      const filieresData = await getAllFiliers();
-      setFilieres(filieresData); // Set the fetched filieres to the state
+      const matieresData = await getAllMatieres();
+      setMatieres(matieresData); // Set the fetched filieres to the state
     } catch (error) {
-      console.error("Error fetching filieres:", error);
+      console.error("Error fetching matieres:", error);
     }
   };
 
   // Input change handler
   const handleInputChange = (e) => {
     const { id, value } = e.target;
-    setFiliere((prevData) => ({
+    setMatiere((prevData) => ({
       ...prevData,
-      [id]: id === "capacity" ? parseInt(value, 10) || 0 : value, // Ensure capacity is a number
+      [id]: value,
     }));
   };
 
   // Add Filiere to the database
-  const addFiliereTo = async () => {
-    const { name, capacity } = filiere;
+  const addMatiereTo = async () => {
+    const { name } = matiere;
 
     // Validation checks
     if (!name.trim()) {
@@ -80,37 +81,23 @@ export default function Home() {
       return;
     }
 
-    if (
-      !capacity ||
-      isNaN(parseInt(capacity, 10)) ||
-      parseInt(capacity, 10) <= 0
-    ) {
-      toast({
-        title: "Validation Error!",
-        description: "Capacity must be a valid positive number.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
       // Proceed to add the filiere
-      const result = await addFiliere({
+      const result = await addMatiere({
         name: name.trim(),
-        capacity: parseInt(capacity, 10),
       });
 
       setIsAdded(true); // Trigger reloading of the filieres list
       toast({
         title: "Done!",
-        description: "Filiere created successfully!",
+        description: "Matiere created successfully!",
         variant: "",
       });
     } catch (error) {
-      console.error("Failed to add filiere:", error);
+      console.error("Failed to add matiere:", error);
       toast({
         title: "Error!",
-        description: "Couldn't add filiere! Please try again later.",
+        description: "Couldn't add matiere! Please try again later.",
         variant: "destructive",
       });
     }
@@ -123,31 +110,31 @@ export default function Home() {
     if (!token) {
       router.push("/login"); // Redirect unauthorized users
     } else {
-      loadFiliers();
+      loadMatieres();
     }
   }, [isAdded, router]);
 
   return (
     <div>
-      <div className="flex flex-1 flex-col gap-4 p-4">
-        <h1 className="font-bold text-3xl">Manage Filiere:</h1>
+      <div className="flex flex-1 flex-col gap-4 p-4 ">
+        <h1 className="font-bold text-3xl">Manage Matieres:</h1>
 
         <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
           {/* DataTable for Filiere */}
           <Card className="mt-8 p-2 pr-6 md:p-6  w-full ">
             <CardHeader className="flex flex-row justify-between">
               <CardTitle className="text-2xl font-normal text-start">
-                Filiere List:
+                Matieres List:
               </CardTitle>
               <Sheet>
                 <SheetTrigger className="w-fit" asChild>
                   <Button variant="outline">
-                    <Plus /> Add Filiere
+                    <Plus /> Add Matiere
                   </Button>
                 </SheetTrigger>
                 <SheetContent side={"top"}>
                   <SheetHeader>
-                    <SheetTitle>Add Filiere:</SheetTitle>
+                    <SheetTitle>Add Matiere:</SheetTitle>
                     <SheetDescription>
                       Click add when you are done.
                     </SheetDescription>
@@ -158,27 +145,16 @@ export default function Home() {
                         Name
                       </Label>
                       <Input
-                        placeholder="Mechanical Engineering"
+                        placeholder="History"
                         id="name"
                         className="col-span-3"
                         onChange={handleInputChange}
                       />
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="capacity" className="text-right">
-                        Capacity
-                      </Label>
-                      <Input
-                        placeholder="200"
-                        id="capacity"
-                        onChange={handleInputChange}
-                        className="col-span-3"
-                      />
-                    </div>
                   </div>
                   <SheetFooter>
                     <SheetClose asChild>
-                      <Button onClick={addFiliereTo} type="submit">
+                      <Button onClick={addMatiereTo} type="submit">
                         <Plus /> Add
                       </Button>
                     </SheetClose>
@@ -188,7 +164,7 @@ export default function Home() {
             </CardHeader>
 
             <CardContent className="max-h-screen overflow-y-auto">
-              <DataTable columns={columns} data={filieres} />
+              <DataTable columns={columns} data={matieres} />
             </CardContent>
           </Card>
         </div>

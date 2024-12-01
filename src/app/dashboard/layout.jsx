@@ -20,13 +20,14 @@ function RootLayout({ children }) {
         {/* Wrap everything inside FiliereProvider */}
         <SidebarProvider>
           <AppSidebar />
-          <SidebarInset>
-            <header className="flex h-16 shrink-0 items-center gap-2 border-b">
-              <div className="flex items-center gap-2 px-3">
+          <SidebarInset className="">
+            <header className="flex w-full  h-16 shrink-0 items-center gap-2 bg-white border-b fixed">
+              <div className="flex items-center gap-2 px-3  ">
                 <SidebarTrigger />
               </div>
             </header>
-            {children} {/* Child pages can now access the FiliereContext */}
+            <div className="mt-16">{children}</div>
+            {/* Child pages can now access the FiliereContext */}
           </SidebarInset>
         </SidebarProvider>
         <Toaster /> {/* Toast notifications will also be available */}

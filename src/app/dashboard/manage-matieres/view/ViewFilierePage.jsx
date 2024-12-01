@@ -5,24 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Check, ChevronsUpDown } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { cn } from "@/lib/utils";
+
 import { getFilier } from "@/app/api/filieres";
-import { RoomCounter } from "@/app/components/ui/room-counter";
 
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
@@ -143,12 +127,7 @@ export default function ViewFilierPage() {
 
             <CardContent className="max-h-screen overflow-y-auto">
               <div class="parent grid grid-cols-[2fr_1fr] grid-rows-[1fr_1fr] gap-0">
-                <div class="div1 col-start-2 col-end-3 row-start-1 row-end-2">
-                  <RoomCounter
-                    title={"Capacity"}
-                    totalRooms={filiere.capacity}
-                  ></RoomCounter>
-                </div>
+                <div class="div1 col-start-2 col-end-3 row-start-1 row-end-2"></div>
                 <div class="div2 col-start-1 col-end-2 row-start-1 row-end-3"></div>
               </div>
             </CardContent>

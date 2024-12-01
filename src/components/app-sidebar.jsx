@@ -45,11 +45,15 @@ const data = {
         },
         {
           title: "Manage Filieres",
-          url: "/dashboard/manage-filiere",
+          url: "/dashboard/manage-filieres",
+        },
+        {
+          title: "Manage Matieres",
+          url: "/dashboard/manage-matieres",
         },
         {
           title: "Manage Rooms",
-          url: "/mr",
+          url: "/dashboard/manage-rooms",
         },
       ],
     },
@@ -118,7 +122,11 @@ export function AppSidebar({ ...props }) {
     out.push("/"); // Reload the page
   };
 
-  const isActive = (url) => router === url;
+  const isActive = (url) => {
+    const currentPathSegment = router.split("/")[2] || "";
+    const targetPathSegment = url.split("/")[2] || "";
+    return currentPathSegment === targetPathSegment;
+  };
 
   return (
     <Sidebar {...props}>

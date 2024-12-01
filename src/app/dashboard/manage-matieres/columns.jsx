@@ -1,5 +1,6 @@
 "use client";
 import { deleteFiliere } from "@/app/api/filieres";
+import { deleteMatiere } from "@/app/api/matieres";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,25 +23,25 @@ const ActionsCell = ({ filiere }) => {
   const { toast } = useToast();
 
   const handleEdit = () => {
-    router.push(`/dashboard/manage-filiere/edit?id=${filiere.id}`);
+    router.push(`/dashboard/manage-matieres/edit?id=${filiere.id}`);
   };
   const handleView = () => {
-    router.push(`/dashboard/manage-filiere/view?id=${filiere.id}`);
+    router.push(`/dashboard/manage-matieres/view?id=${filiere.id}`);
   };
 
   const handleDelete = async () => {
     try {
-      await deleteFiliere(filiere.id); // Call the delete API function
+      await deleteMatiere(filiere.id); // Call the delete API function
       toast({
         title: "Done!",
-        description: "Filiere deleted successfully!",
+        description: "Matiere deleted successfully!",
       });
       location.reload();
     } catch (error) {
-      console.error("Error deleting filiere:", error);
+      console.error("Error deleting matiere:", error);
       toast({
         title: "Error!",
-        description: "Couldn't delete filiere! Please try again later.",
+        description: "Couldn't delete matiere! Please try again later.",
         variant: "destructive",
       });
     }
@@ -64,7 +65,7 @@ const ActionsCell = ({ filiere }) => {
             </AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the
-              filiere.
+              matiere.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -78,25 +79,17 @@ const ActionsCell = ({ filiere }) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Button className="" variant="" size="sm" onClick={handleView}>
+      {/* <Button className="" variant="" size="sm" onClick={handleView}>
         <Eye></Eye>
-      </Button>
+      </Button> */}
     </div>
   );
 };
 
 export const columns = [
   {
-    accessorKey: "id",
-    header: "ID",
-  },
-  {
     accessorKey: "name",
     header: "Filière Name",
-  },
-  {
-    accessorKey: "capacity",
-    header: "Capacity",
   },
   {
     id: "actions",
