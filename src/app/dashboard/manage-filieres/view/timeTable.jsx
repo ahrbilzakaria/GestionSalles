@@ -26,7 +26,7 @@ const seanceTimeMapping = {
 
 const Timetable = ({ data }) => {
   // Create events for the calendar based on the data
-  const events = data.map((item) => ({
+  const events = data?.map((item) => ({
     title: `${item.chargeHoraire?.matiere?.name} (${item.typeSeance}) - ${item.salle?.name}`,
     start: moment()
       .day(dayMapping[item.jour]) // Use the mapped English day
@@ -45,7 +45,7 @@ const Timetable = ({ data }) => {
   }));
 
   return (
-    <div className="h-full p-5 ">
+    <div className="h-full  ">
       <Calendar
         localizer={localizer}
         events={events}
@@ -56,7 +56,7 @@ const Timetable = ({ data }) => {
         step={60}
         timeslots={1}
         style={{ height: "75vh" }}
-        className="border bg-white"
+        className=" bg-white shadow-sm "
         dayLayoutAlgorithm={"no-overlap"}
         eventPropGetter={(event) => ({
           style: {

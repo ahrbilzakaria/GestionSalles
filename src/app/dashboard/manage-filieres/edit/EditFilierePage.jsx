@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
-import { notFound, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { getFilier, updateFiliere } from "@/app/api/filieres";
 import { useToast } from "@/hooks/use-toast";
 import { TextGenerateEffect } from "@/components/text-generate";

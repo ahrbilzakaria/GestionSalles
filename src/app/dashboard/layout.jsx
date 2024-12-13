@@ -30,7 +30,8 @@ function RootLayout({ children }) {
             {/* Child pages can now access the FiliereContext */}
           </SidebarInset>
         </SidebarProvider>
-        <Toaster /> {/* Toast notifications will also be available */}
+        {/* Toast notifications will also be available */}
+        <Toaster />
       </body>
     </html>
   );

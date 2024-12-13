@@ -126,3 +126,78 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.rbc-time-gutter.rbc-time-column {
+  font-weight: 600 !important;
+}
+
+.rbc-time-gutter.rbc-time-column.rbc-timeslot-group {
+  padding: 0px 20px !important;
+}
+
+.rbc-time-slot {
+  display: flex !important;
+  align-items: center;
+}
+
+.rbc-time-header-gutter {
+  border-bottom: 1px solid #ddd;
+}
+
+.rbc-day-slot {
+  font-size: 1.2rem;
+}
+
+.rbc-row-content {
+  display: none;
+  height: 0px !important;
+}
+
+.rbc-time-view .rbc-allday-cell {
+  height: 0% !important;
+}
+
+.rbc-header {
+  padding-block: 1rem !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rbc-event {
+  border: none !important;
+  height: calc(20% - 1px) !important;
+  /*background-color: hsl(var(--primary)) !important;*/
+}
+
+.rbc-day-slot .rbc-events-container {
+  margin: 0rem !important;
+}
+
+.rbc-time-content {
+  border: none !important;
+}
+
+.rbc-today {
+  background-color: hsl(var(--secondary)) !important;
+}
+
+.rbc-time-view {
+  border-bottom: none !important ;
+}
+
+.rbc-event-label {
+  display: none !important;
+}
+
+.rbc-event-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 300;
+  text-align: center;
+}
+
+.rbc-current-time-indicator {
+  display: none;
+}

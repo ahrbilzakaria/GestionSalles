@@ -1,12 +1,6 @@
-"use client"; // Mark the component as client-side
+"use client";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -17,7 +11,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Clover, Edit, Plus, Search, Trash } from "lucide-react";
+import { Clover, Edit, Pen, Plus, Search, Timer, X } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -26,7 +20,6 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { cn } from "@/lib/utils";
 import { getFilier } from "@/app/api/filieres";
 import { RoomCounter } from "@/app/components/ui/room-counter";
 import {
@@ -48,6 +41,9 @@ import {
 } from "@/app/api/chargeHoraire";
 import { Input } from "@/components/ui/input";
 import { ChargeHoraireCard } from "./ChargeHoraireCard";
+import { TableFiliere } from "./TableFiliere";
+import { getAllEmploisDuTemps } from "@/app/api/emploi";
+import { ManageTable } from "./ManageTable";
 
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
@@ -84,13 +80,29 @@ export default function ViewFilierPage() {
     tpHours: "",
     tdHours: "",
   });
+  const [show, isShow] = useState(false);
+  const [manage, isManage] = useState(false);
+  const [seanceAdded, setSeanceAdded] = useState(false);
+
   const [selectedStatus, setSelectedStatus] = useState();
+  const [timeTable, setTimeTable] = useState();
+  const loadTimeTable = async (id) => {
+    try {
+      const filiereTimeTable = await getAllEmploisDuTemps(id);
+      setTimeTable(filiereTimeTable); // Set the fetched filieres to the state
+      console.log(filiereTimeTable);
+    } catch (error) {
+      console.error("Error fetching filiere's time table:", error);
+    } finally {
+      setFetched(true);
+    }
+  };
   const loadFilier = async (id) => {
     try {
       const filiereData = await getFilier(id);
       setFiliere(filiereData); // Set the fetched filieres to the state
     } catch (error) {
-      console.error("Error fetching filieres:", error);
+      console.error("Error fetching filiere:", error);
     } finally {
       setFetched(true);
     }
@@ -106,6 +118,7 @@ export default function ViewFilierPage() {
   const loadCharges = async () => {
     try {
       const chargesData = await getAllChargesHoraires(id);
+      console.log(chargesData);
       setChargeHoraires(chargesData);
       setFilteredCharges(chargesData);
     } catch (error) {
@@ -171,6 +184,7 @@ export default function ViewFilierPage() {
     setId(Number(searchParams.get("id") || null));
     if (id) {
       loadFilier(Number(id));
+      loadTimeTable(Number(id));
       loadCharges();
       setIsAdded(false);
       setIsDeleted(false);
@@ -182,6 +196,10 @@ export default function ViewFilierPage() {
 
     // setFiliere({ name, capacity: Number(capacity) });
   }, [searchParams, fetched, id, isAdded, isDeleted]);
+  useEffect(() => {
+    loadTimeTable(Number(id));
+    loadCharges();
+  }, [seanceAdded]);
 
   const [filteredCharges, setFilteredCharges] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -376,17 +394,15 @@ export default function ViewFilierPage() {
             </CardHeader>
 
             <CardContent className="">
-              <div className="mt-4">
-                <div className="relative max-w-sm mb-4">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground " />
-                  <Input
-                    type="text"
-                    placeholder="Search Matieres..."
-                    value={searchQuery}
-                    onChange={handleSearch}
-                    className="pl-12 w-full py-6"
-                  />
-                </div>
+              <div className="mt-4 relative max-w-sm mb-6 ">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground " />
+                <Input
+                  type="text"
+                  placeholder="Search Matieres..."
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  className="pl-12 w-full py-6"
+                />
               </div>
               <div className="parent sm:block md:grid grid-cols-[2fr_1fr] grid-rows-[1fr_1fr] gap-4">
                 <div className="div1 col-start-2 max-h-[14rem] col-end-3 row-start-1 row-end-2 md:block hidden">
@@ -394,6 +410,48 @@ export default function ViewFilierPage() {
                     title={"Capacity"}
                     totalRooms={filiere.capacity}
                   ></RoomCounter>
+                </div>
+                <div className="div1 col-start-2 max-h-[14rem] col-end-3 row-start-2 row-end-3 flex flex-col gap-4 md:-mt-4">
+                  <div className=" ">
+                    <Button
+                      variant={show ? "destructive" : "outline"}
+                      className="w-full -mt-6"
+                      onClick={() => {
+                        isShow(!show);
+                        manage ? isManage(!manage) : null;
+                      }}
+                    >
+                      {show ? (
+                        <span className="flex gap-2 items-center">
+                          <X></X>Timetable
+                        </span>
+                      ) : (
+                        <span className="flex gap-2 items-center">
+                          <Timer></Timer>Timetable
+                        </span>
+                      )}
+                    </Button>
+                  </div>
+                  <div className=" ">
+                    <Button
+                      variant={manage ? "destructive" : "outline"}
+                      className="w-full -mt-6 mb-4 md:mb-0"
+                      onClick={() => {
+                        isManage(!manage);
+                        show ? isShow(!show) : null;
+                      }}
+                    >
+                      {manage ? (
+                        <span className="flex gap-2 items-center">
+                          <X></X>Manage Timetable
+                        </span>
+                      ) : (
+                        <span className="flex gap-2 items-center">
+                          <Pen></Pen>Manage Timetable
+                        </span>
+                      )}
+                    </Button>
+                  </div>
                 </div>
                 <div className="div2 col-start-1 col-end-2 row-start-1 row-end-3">
                   <Card>
@@ -427,6 +485,18 @@ export default function ViewFilierPage() {
                   </Card>
                 </div>
               </div>
+              {show ? (
+                <TableFiliere timeTableData={timeTable}></TableFiliere>
+              ) : (
+                ""
+              )}
+              {manage && (
+                <ManageTable
+                  id={id}
+                  timeTable={timeTable}
+                  setSeanceAdded={setSeanceAdded}
+                ></ManageTable>
+              )}
             </CardContent>
           </Card>
         </div>
