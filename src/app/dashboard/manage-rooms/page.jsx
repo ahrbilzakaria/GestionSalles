@@ -126,7 +126,7 @@ export default function Home() {
     } catch (error) {
       toast({
         title: "Error!",
-        description: "Couldn't add salle! Please try again later.",
+        description: error.response.data.message,
         variant: "destructive",
       });
     }

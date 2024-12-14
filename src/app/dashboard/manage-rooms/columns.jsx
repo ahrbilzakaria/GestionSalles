@@ -36,10 +36,9 @@ const ActionsCell = ({ salle }) => {
 
       location.reload();
     } catch (error) {
-      console.error("Error deleting salle:", error);
       toast({
         title: "Error!",
-        description: "Couldn't delete salle! Please try again later.",
+        description: error.response.data.message,
         variant: "destructive",
       });
     }

@@ -115,7 +115,6 @@ const ActionsCell = ({ filiere }) => {
       }
     } catch (error) {
       // Log the error and show a toast notification
-      console.error("Error updating seance:", error);
 
       // Display appropriate error message
       toast({
@@ -176,10 +175,9 @@ const ActionsCell = ({ filiere }) => {
       });
       location.reload();
     } catch (error) {
-      console.error("Error deleting seance:", error);
       toast({
         title: "Error!",
-        description: "Couldn't delete seance! Please try again later.",
+        description: error.response.data.message,
         variant: "destructive",
       });
     }

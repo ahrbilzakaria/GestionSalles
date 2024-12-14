@@ -148,7 +148,6 @@ export function ManageTable({ timeTable, id, setSeanceAdded }) {
       }
     } catch (error) {
       // Log the error and show a toast notification
-      console.error("Error adding seance:", error);
 
       // Display appropriate error message
       toast({
@@ -174,7 +173,7 @@ export function ManageTable({ timeTable, id, setSeanceAdded }) {
     } catch (error) {
       toast({
         title: "Error!",
-        description: "Failed to delete all seances. Please try again.",
+        description: error.response.data.message,
         variant: "destructive",
       });
     }

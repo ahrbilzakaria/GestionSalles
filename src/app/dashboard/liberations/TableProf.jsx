@@ -1,0 +1,580 @@
+"use client";
+import { Square } from "lucide-react";
+import Timetable from "./timeTable";
+
+const tempTimetableData = [
+  {
+    id: 10,
+    jour: "LUNDI",
+    seance: "SEANCE_2",
+    typeSeance: "TD",
+    chargeHoraire: {
+      id: 6,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 1,
+        name: "Analyse de donnees",
+      },
+      heuresCours: 30,
+      heuresTP: 16,
+      heuresTD: 12,
+    },
+    salle: {
+      id: 3,
+      name: "K3",
+      location: "Khadija Etage 2",
+      numberOfSeats: 20,
+      type: "TD",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 11,
+    jour: "LUNDI",
+    seance: "SEANCE_3",
+    typeSeance: "TD",
+    chargeHoraire: {
+      id: 8,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 4,
+        name: "Macanique 2",
+      },
+      heuresCours: 20,
+      heuresTP: 6,
+      heuresTD: 22,
+    },
+    salle: {
+      id: 3,
+      name: "K3",
+      location: "Khadija Etage 2",
+      numberOfSeats: 20,
+      type: "TD",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 12,
+    jour: "MARDI",
+    seance: "SEANCE_3",
+    typeSeance: "COURS",
+    chargeHoraire: {
+      id: 8,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 4,
+        name: "Macanique 2",
+      },
+      heuresCours: 20,
+      heuresTP: 6,
+      heuresTD: 22,
+    },
+    salle: {
+      id: 1,
+      name: "K1",
+      location: "Khadija Etage 1",
+      numberOfSeats: 200,
+      type: "COURS",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 13,
+    jour: "MARDI",
+    seance: "SEANCE_2",
+    typeSeance: "COURS",
+    chargeHoraire: {
+      id: 8,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 4,
+        name: "Macanique 2",
+      },
+      heuresCours: 20,
+      heuresTP: 6,
+      heuresTD: 22,
+    },
+    salle: {
+      id: 1,
+      name: "K1",
+      location: "Khadija Etage 1",
+      numberOfSeats: 200,
+      type: "COURS",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 14,
+    jour: "MARDI",
+    seance: "SEANCE_4",
+    typeSeance: "COURS",
+    chargeHoraire: {
+      id: 10,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 6,
+        name: "Electricite 2",
+      },
+      heuresCours: 10,
+      heuresTP: 6,
+      heuresTD: 22,
+    },
+    salle: {
+      id: 1,
+      name: "K1",
+      location: "Khadija Etage 1",
+      numberOfSeats: 200,
+      type: "COURS",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 15,
+    jour: "MERCREDI",
+    seance: "SEANCE_4",
+    typeSeance: "COURS",
+    chargeHoraire: {
+      id: 10,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 6,
+        name: "Electricite 2",
+      },
+      heuresCours: 10,
+      heuresTP: 6,
+      heuresTD: 22,
+    },
+    salle: {
+      id: 1,
+      name: "K1",
+      location: "Khadija Etage 1",
+      numberOfSeats: 200,
+      type: "COURS",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 16,
+    jour: "MERCREDI",
+    seance: "SEANCE_1",
+    typeSeance: "TP",
+    chargeHoraire: {
+      id: 10,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 6,
+        name: "Electricite 2",
+      },
+      heuresCours: 10,
+      heuresTP: 6,
+      heuresTD: 22,
+    },
+    salle: {
+      id: 4,
+      name: "K4",
+      location: "Khadija Etage 2",
+      numberOfSeats: 20,
+      type: "TP",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 17,
+    jour: "MERCREDI",
+    seance: "SEANCE_2",
+    typeSeance: "TP",
+    chargeHoraire: {
+      id: 11,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 8,
+        name: "Analyse 1",
+      },
+      heuresCours: 10,
+      heuresTP: 6,
+      heuresTD: 22,
+    },
+    salle: {
+      id: 4,
+      name: "K4",
+      location: "Khadija Etage 2",
+      numberOfSeats: 20,
+      type: "TP",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 18,
+    jour: "JEUDI",
+    seance: "SEANCE_2",
+    typeSeance: "TP",
+    chargeHoraire: {
+      id: 11,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 8,
+        name: "Analyse 1",
+      },
+      heuresCours: 10,
+      heuresTP: 6,
+      heuresTD: 22,
+    },
+    salle: {
+      id: 4,
+      name: "K4",
+      location: "Khadija Etage 2",
+      numberOfSeats: 20,
+      type: "TP",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 8,
+    jour: "LUNDI",
+    seance: "SEANCE_4",
+    typeSeance: "COURS",
+    chargeHoraire: {
+      id: 12,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 9,
+        name: "Analyse 2",
+      },
+      heuresCours: 10,
+      heuresTP: 18,
+      heuresTD: 2,
+    },
+    salle: {
+      id: 1,
+      name: "K1",
+      location: "Khadija Etage 1",
+      numberOfSeats: 200,
+      type: "COURS",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 9,
+    jour: "LUNDI",
+    seance: "SEANCE_1",
+    typeSeance: "COURS",
+    chargeHoraire: {
+      id: 12,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 9,
+        name: "Analyse 2",
+      },
+      heuresCours: 10,
+      heuresTP: 18,
+      heuresTD: 2,
+    },
+    salle: {
+      id: 1,
+      name: "K1",
+      location: "Khadija Etage 1",
+      numberOfSeats: 200,
+      type: "COURS",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 19,
+    jour: "JEUDI",
+    seance: "SEANCE_3",
+    typeSeance: "TP",
+    chargeHoraire: {
+      id: 12,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 9,
+        name: "Analyse 2",
+      },
+      heuresCours: 10,
+      heuresTP: 18,
+      heuresTD: 2,
+    },
+    salle: {
+      id: 4,
+      name: "K4",
+      location: "Khadija Etage 2",
+      numberOfSeats: 20,
+      type: "TP",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 20,
+    jour: "VENDREDI",
+    seance: "SEANCE_3",
+    typeSeance: "TP",
+    chargeHoraire: {
+      id: 12,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 9,
+        name: "Analyse 2",
+      },
+      heuresCours: 10,
+      heuresTP: 18,
+      heuresTD: 2,
+    },
+    salle: {
+      id: 4,
+      name: "K4",
+      location: "Khadija Etage 2",
+      numberOfSeats: 20,
+      type: "TP",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 21,
+    jour: "VENDREDI",
+    seance: "SEANCE_1",
+    typeSeance: "TD",
+    chargeHoraire: {
+      id: 12,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 9,
+        name: "Analyse 2",
+      },
+      heuresCours: 10,
+      heuresTP: 18,
+      heuresTD: 2,
+    },
+    salle: {
+      id: 3,
+      name: "K3",
+      location: "Khadija Etage 2",
+      numberOfSeats: 20,
+      type: "TD",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+  {
+    id: 22,
+    jour: "VENDREDI",
+    seance: "SEANCE_2",
+    typeSeance: "TD",
+    chargeHoraire: {
+      id: 12,
+      filiere: {
+        id: 6,
+        name: "G.Info1",
+        capacity: 60,
+      },
+      matiere: {
+        id: 9,
+        name: "Analyse 2",
+      },
+      heuresCours: 10,
+      heuresTP: 18,
+      heuresTD: 2,
+    },
+    salle: {
+      id: 3,
+      name: "K3",
+      location: "Khadija Etage 2",
+      numberOfSeats: 20,
+      type: "TD",
+    },
+    user: {
+      id: 15,
+      username: "prof4",
+      password: "password4",
+      email: "prof4@example.com",
+      role: "PROFESSEUR",
+      verificationToken: "token4",
+      validate: true,
+    },
+  },
+];
+export const TableProf = (timetableData) => {
+  return (
+    <div className="flex flex-1 flex-col gap-4 mt-8">
+      <h1 className="text-2xl font-normal text-start w-full justify-between flex gap-4 ">
+        Time Table :{" "}
+        <span className="flex text-sm items-center gap-2">
+          <Square className="bg-[hsl(var(--secondary))] text-transparent h-4 w-4"></Square>
+          Current day
+        </span>
+      </h1>
+      {timetableData.timeTableData ? (
+        <Timetable data={timetableData.timeTableData} />
+      ) : (
+        <p>No timetable data available.</p>
+      )}
+    </div>
+  );
+};
+//<p>No timetable data available.</p>

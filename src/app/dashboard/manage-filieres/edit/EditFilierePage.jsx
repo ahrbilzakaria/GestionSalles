@@ -80,10 +80,9 @@ export default function EditFilierePage() {
         variant: "",
       });
     } catch (error) {
-      console.error("Failed to update filiere:", error);
       toast({
         title: "Error!",
-        description: "Couldn't update filiere! Please try again later.",
+        description: error.response.data.message,
         variant: "destructive",
       });
     }

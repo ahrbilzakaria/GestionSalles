@@ -84,10 +84,9 @@ export default function EditsallePage() {
         description: "Salle updated successfully!",
       });
     } catch (error) {
-      console.error("Failed to update salle:", error);
       toast({
         title: "Error!",
-        description: "Couldn't update salle! Please try again later.",
+        description: error.response.data.message,
         variant: "destructive",
       });
     }

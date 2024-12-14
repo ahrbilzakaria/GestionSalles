@@ -66,10 +66,9 @@ export default function EditMatierePage() {
         variant: "",
       });
     } catch (error) {
-      console.error("Failed to update matiere:", error);
       toast({
         title: "Error!",
-        description: "Couldn't update matiere! Please try again later.",
+        description: error.response.data.message,
         variant: "destructive",
       });
     }

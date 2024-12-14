@@ -173,7 +173,7 @@ export default function ViewFilierPage() {
       } else {
         toast({
           title: "Error!",
-          description: "Error adding matiere.",
+          description: error.response.data.message,
           variant: "destructive",
         });
       }

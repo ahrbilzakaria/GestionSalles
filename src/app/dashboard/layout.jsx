@@ -20,8 +20,8 @@ function RootLayout({ children }) {
         <SidebarProvider>
           <AppSidebar />
           <SidebarInset className="">
-            <header className="flex w-full  h-16 shrink-0 items-center gap-2 bg-white border-b fixed">
-              <div className="flex items-center gap-2 px-3  ">
+            <header className="flex w-full  h-16 shrink-0 items-center gap-2 bg-white border-b fixed z-10">
+              <div className="flex items-center gap-2 px-3 w-full  ">
                 <SidebarTrigger />
               </div>
             </header>

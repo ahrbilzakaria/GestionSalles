@@ -105,10 +105,9 @@ export default function Home() {
         variant: "",
       });
     } catch (error) {
-      console.error("Failed to add matiere:", error);
       toast({
         title: "Error!",
-        description: "Couldn't add matiere! Please try again later.",
+        description: error.response.data.message,
         variant: "destructive",
       });
     }

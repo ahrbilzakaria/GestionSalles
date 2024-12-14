@@ -149,8 +149,12 @@ const data = {
       title: "Operations",
       items: [
         {
-          title: "Reservation Requests",
-          url: "/dashboard/reservation_requests",
+          title: "Reservations",
+          url: "/dashboard/reservations",
+        },
+        {
+          title: "Liberations",
+          url: "/dashboard/liberations",
         },
       ],
     },
@@ -168,7 +172,6 @@ const data = {
 
 export function AppSidebar({ ...props }) {
   const router = usePathname();
-  const out = useRouter();
   const [user, setUser] = React.useState(null);
 
   // Check for user token in cookies and update user state
@@ -176,10 +179,8 @@ export function AppSidebar({ ...props }) {
     const userToken = getCookie("userToken"); // Read user token from cookies
     if (userToken) {
       setUser(userToken); // Set user data if token is found
-    } else {
-      out.push("/login"); // Redirect to login if no user token
     }
-  }, [out]);
+  }, []);
 
   const handleRefresh = () => {
     out.push("/"); // Reload the page

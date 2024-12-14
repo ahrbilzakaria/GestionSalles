@@ -38,10 +38,9 @@ const ActionsCell = ({ filiere }) => {
       });
       location.reload();
     } catch (error) {
-      console.error("Error deleting matiere:", error);
       toast({
         title: "Error!",
-        description: "Couldn't delete matiere! Please try again later.",
+        description: error.response.data.message,
         variant: "destructive",
       });
     }

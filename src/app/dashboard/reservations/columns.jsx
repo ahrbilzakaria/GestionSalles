@@ -1,5 +1,5 @@
 "use client";
-import { deleteFiliere } from "@/app/api/filieres";
+import { deleteReservation } from "@/app/api/reservations";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,27 +13,17 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button"; // Import your button component
 import { useToast } from "@/hooks/use-toast";
-import { Edit, Eye, Trash } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Trash } from "lucide-react";
 
 const ActionsCell = ({ filiere }) => {
-  const router = useRouter();
   const { toast } = useToast();
-
-  const handleEdit = () => {
-    router.push(`/dashboard/manage-filieres/edit?id=${filiere.id}`);
-  };
-  const handleView = () => {
-    router.push(`/dashboard/manage-filieres/view?id=${filiere.id}`);
-  };
 
   const handleDelete = async () => {
     try {
-      await deleteFiliere(filiere.id); // Call the delete API function
+      await deleteReservation(filiere.id); // Call the delete API function
       toast({
         title: "Done!",
-        description: "Filiere deleted successfully!",
+        description: "Reservation deleted successfully!",
       });
       location.reload();
     } catch (error) {
@@ -47,9 +37,6 @@ const ActionsCell = ({ filiere }) => {
 
   return (
     <div className="flex gap-2 w-[100px] mr-2">
-      <Button className="" variant="secondary" size="sm" onClick={handleEdit}>
-        <Edit /> Edit
-      </Button>
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button className="" variant="destructive" size="sm">
@@ -63,7 +50,7 @@ const ActionsCell = ({ filiere }) => {
             </AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the
-              filiere.
+              reservation.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -77,25 +64,34 @@ const ActionsCell = ({ filiere }) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Button className="" variant="" size="sm" onClick={handleView}>
-        <Eye></Eye>
-      </Button>
     </div>
   );
 };
 
 export const columns = [
   {
-    accessorKey: "id",
-    header: "ID",
+    accessorKey: "jour",
+    header: "Day",
   },
   {
-    accessorKey: "name",
-    header: "Filière Name",
+    accessorKey: "week",
+    header: "Week Number",
   },
   {
-    accessorKey: "capacity",
-    header: "Capacity",
+    accessorKey: "seance",
+    header: "Seance",
+  },
+  {
+    accessorKey: "salle.name",
+    header: "Salle",
+  },
+  {
+    accessorKey: "reservationStatus",
+    header: "Status",
+  },
+  {
+    accessorKey: "filiere.name",
+    header: "Filliere",
   },
   {
     id: "actions",

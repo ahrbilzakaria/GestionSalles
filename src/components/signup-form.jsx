@@ -111,10 +111,9 @@ export function SignUpForm() {
       });
       setUserCreated(true); // Set state to true when user is created
     } catch (error) {
-      console.error("Failed to send data:", error);
       toast({
         title: "Error!",
-        description: "Couldn't sign up!",
+        description: error.response.data.message,
         variant: "destructive",
       });
     } finally {

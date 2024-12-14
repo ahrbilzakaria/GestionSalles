@@ -57,7 +57,7 @@ export function ChargeHoraireCard({ title, charge, id, setIsDeleted }) {
     } catch (error) {
       toast({
         title: "Error!",
-        description: "Error deleting matiere.",
+        description: error.response.data.message,
         variant: "destructive",
       });
     }
@@ -95,7 +95,7 @@ export function ChargeHoraireCard({ title, charge, id, setIsDeleted }) {
     } catch (error) {
       toast({
         title: "Error!",
-        description: "Error updating charge.",
+        description: error.response.data.message,
         variant: "destructive",
       });
     }

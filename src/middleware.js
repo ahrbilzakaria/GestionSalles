@@ -28,7 +28,8 @@ export function middleware(request) {
       ]),
       PROFESSEUR: new Set([
         "/dashboard/home",
-        "/dashboard/reservation_requests",
+        "/dashboard/reservations",
+        "/dashboard/liberations",
         "/dashboard/notifications",
       ]),
     };
