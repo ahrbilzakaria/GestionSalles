@@ -262,15 +262,17 @@ export default function Home() {
               </Sheet>
             </CardHeader>
             <CardContent className="max-h-screen overflow-y-auto">
-              <div className="relative max-w-sm mb-4">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground " />
-                <Input
-                  type="text"
-                  placeholder="Search Salle..."
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="pl-12 w-full py-6"
-                />
+              <div className="mt-4 max-w-sm mb-6">
+                <div className="flex items-center bg-white border  ">
+                  <Search className="ml-3 mr-3 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Search Salle..."
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    className="w-full py-3 pl-3 border-none shadow-none"
+                  />
+                </div>
               </div>
               <DataTable columns={columns} data={filteredSalles} />
             </CardContent>

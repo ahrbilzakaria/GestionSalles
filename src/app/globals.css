@@ -201,3 +201,11 @@ body {
 .rbc-current-time-indicator {
   display: none;
 }
+
+.rbc-header:last-child {
+  display: none;
+}
+
+.rbc-day-slot:last-child {
+  display: none;
+}

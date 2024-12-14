@@ -18,7 +18,7 @@ import { DataTable } from "./data-table";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
@@ -46,15 +46,26 @@ export default function Home() {
   const [isAdded, setIsAdded] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const [filteredFilieres, setFilteredFilieres] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Function to load filieres data
   const loadFiliers = async () => {
     try {
       const filieresData = await getAllFiliers();
       setFilieres(filieresData); // Set the fetched filieres to the state
+      setFilteredFilieres(filieresData); // Set the initial filtered filieres
     } catch (error) {
       console.error("Error fetching filieres:", error);
     }
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    setFilteredFilieres(
+      filieres.filter((filiere) => filiere.name.toLowerCase().includes(query))
+    );
   };
 
   // Input change handler
@@ -188,7 +199,19 @@ export default function Home() {
             </CardHeader>
 
             <CardContent className="max-h-screen overflow-y-auto">
-              <DataTable columns={columns} data={filieres} />
+              <div className="mt-4 max-w-sm mb-6">
+                <div className="flex items-center bg-white border  ">
+                  <Search className="ml-3 mr-3 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Search Filiere..."
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    className="w-full py-3 pl-3 border-none shadow-none"
+                  />
+                </div>
+              </div>
+              <DataTable columns={columns} data={filteredFilieres} />
             </CardContent>
           </Card>
         </div>

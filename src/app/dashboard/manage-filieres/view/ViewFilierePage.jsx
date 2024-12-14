@@ -90,7 +90,6 @@ export default function ViewFilierPage() {
     try {
       const filiereTimeTable = await getAllEmploisDuTemps(id);
       setTimeTable(filiereTimeTable); // Set the fetched filieres to the state
-      console.log(filiereTimeTable);
     } catch (error) {
       console.error("Error fetching filiere's time table:", error);
     } finally {
@@ -118,7 +117,7 @@ export default function ViewFilierPage() {
   const loadCharges = async () => {
     try {
       const chargesData = await getAllChargesHoraires(id);
-      console.log(chargesData);
+
       setChargeHoraires(chargesData);
       setFilteredCharges(chargesData);
     } catch (error) {
@@ -197,8 +196,12 @@ export default function ViewFilierPage() {
     // setFiliere({ name, capacity: Number(capacity) });
   }, [searchParams, fetched, id, isAdded, isDeleted]);
   useEffect(() => {
-    loadTimeTable(Number(id));
-    loadCharges();
+    if (id) {
+      loadTimeTable(Number(id));
+      loadCharges();
+    }
+
+    setSeanceAdded(false);
   }, [seanceAdded]);
 
   const [filteredCharges, setFilteredCharges] = useState([]);
@@ -394,15 +397,17 @@ export default function ViewFilierPage() {
             </CardHeader>
 
             <CardContent className="">
-              <div className="mt-4 relative max-w-sm mb-6 ">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground " />
-                <Input
-                  type="text"
-                  placeholder="Search Matieres..."
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="pl-12 w-full py-6"
-                />
+              <div className="mt-4 max-w-sm mb-6">
+                <div className="flex items-center bg-white border ">
+                  <Search className="ml-3 mr-3 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Search Matiere..."
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    className="w-full py-3 pl-3 border-none shadow-none"
+                  />
+                </div>
               </div>
               <div className="parent sm:block md:grid grid-cols-[2fr_1fr] grid-rows-[1fr_1fr] gap-4">
                 <div className="div1 col-start-2 max-h-[14rem] col-end-3 row-start-1 row-end-2 md:block hidden">

@@ -18,7 +18,7 @@ import { DataTable } from "./data-table";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { addMatiere, getAllMatieres } from "@/app/api/matieres";
@@ -47,12 +47,23 @@ export default function Home() {
   const [isAdded, setIsAdded] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const [filteredMatieres, setFilteredMatieres] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    setFilteredMatieres(
+      matieres.filter((matiere) => matiere.name.toLowerCase().includes(query))
+    );
+  };
 
   // Function to load filieres data
   const loadMatieres = async () => {
     try {
       const matieresData = await getAllMatieres();
-      setMatieres(matieresData); // Set the fetched filieres to the state
+      setMatieres(matieresData); // Set the fetched matieres
+      setFilteredMatieres(matieresData); // Initialize the filtered matieres
     } catch (error) {
       console.error("Error fetching matieres:", error);
     }
@@ -164,7 +175,19 @@ export default function Home() {
             </CardHeader>
 
             <CardContent className="max-h-screen overflow-y-auto">
-              <DataTable columns={columns} data={matieres} />
+              <div className="mt-4 max-w-sm mb-6">
+                <div className="flex items-center bg-white border  ">
+                  <Search className="ml-3 mr-3 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Search Salle..."
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    className="w-full py-3 pl-3 border-none shadow-none"
+                  />
+                </div>
+              </div>
+              <DataTable columns={columns} data={filteredMatieres} />
             </CardContent>
           </Card>
         </div>

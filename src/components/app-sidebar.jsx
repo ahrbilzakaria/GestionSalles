@@ -1,6 +1,6 @@
-"use client";
-import * as React from "react";
-import { GalleryVerticalEnd, GraduationCap, LogOut } from "lucide-react";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { GraduationCap, LogOut } from "lucide-react";
 
 import {
   Sidebar,
@@ -16,120 +16,83 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/app/components/ui/button";
 
-// Utility function to get cookies by name
-const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    const cookieValue = parts.pop().split(";").shift();
-    try {
-      return JSON.parse(cookieValue); // Parse the cookie value as JSON
-    } catch (e) {
-      return null; // In case the cookie is not a valid JSON
-    }
-  }
-  return null;
-};
-
 const data = {
-  navMain: [
+  RespoSalles: [
     {
       title: "Management",
       items: [
-        {
-          title: "Overview",
-          url: "/dashboard/home",
-        },
-        {
-          title: "Manage Filieres",
-          url: "/dashboard/manage-filieres",
-        },
-        {
-          title: "Manage Matieres",
-          url: "/dashboard/manage-matieres",
-        },
-        {
-          title: "Manage Rooms",
-          url: "/dashboard/manage-rooms",
-        },
+        { title: "Overview", url: "/dashboard/home" },
+        { title: "Manage Rooms", url: "/dashboard/manage-rooms" },
       ],
+    },
+    {
+      title: "User",
+      items: [{ title: "Notifications", url: "/dashboard/notifications" }],
+    },
+  ],
+  Coordinateur: [
+    {
+      title: "Management",
+      items: [
+        { title: "Overview", url: "/dashboard/home" },
+        { title: "Manage Filieres", url: "/dashboard/manage-filieres" },
+        { title: "Manage Matieres", url: "/dashboard/manage-matieres" },
+      ],
+    },
+    {
+      title: "User",
+      items: [{ title: "Notifications", url: "/dashboard/notifications" }],
+    },
+  ],
+  Professeur: [
+    {
+      title: "Management",
+      items: [{ title: "Overview", url: "/dashboard/home" }],
     },
     {
       title: "Operations",
       items: [
         {
           title: "Reservation Requests",
-          url: "/rr",
-        },
-        {
-          title: "Schedules",
-          url: "/s",
-        },
-        {
-          title: "Room Availability",
-          url: "/ra",
-        },
-        {
-          title: "Conflict Resolution",
-          url: "/rs",
-        },
-      ],
-    },
-    {
-      title: "Analytics",
-      items: [
-        {
-          title: "Reports and Analytics",
-          url: "/raa",
+          url: "/dashboard/reservation_requests",
         },
       ],
     },
     {
       title: "User",
-      items: [
-        {
-          title: "My Reservations",
-          url: "/r",
-        },
-        {
-          title: "Notifications",
-          url: "/n",
-        },
-      ],
+      items: [{ title: "Notifications", url: "/dashboard/notifications" }],
     },
   ],
 };
 
-export function AppSidebar({ ...props }) {
-  const router = usePathname();
-  const out = useRouter();
-  const [user, setUser] = React.useState(null);
+export async function AppSidebar() {
+  // Await the cookies API to read the cookie value
+  const cookieStore = cookies();
+  const token = await cookieStore.get("userToken");
 
-  // Check for user token in cookies and update user state
-  React.useEffect(() => {
-    const userToken = getCookie("userToken"); // Read user token from cookies
-    if (userToken) {
-      setUser(userToken); // Set user data if token is found
-    } else {
-      out.push("/login"); // Redirect to login if no user token
-    }
-  }, [out]);
+  // Redirect to login if no token exists
+  if (!token) {
+    redirect("/login");
+  }
 
-  const handleRefresh = () => {
-    out.push("/"); // Reload the page
-  };
+  let user;
+  try {
+    user = JSON.parse(token.value); // Parse user data
+  } catch {
+    redirect("/login"); // Redirect if token parsing fails
+  }
 
-  const isActive = (url) => {
-    const currentPathSegment = router.split("/")[2] || "";
-    const targetPathSegment = url.split("/")[2] || "";
-    return currentPathSegment === targetPathSegment;
-  };
+  const roleData = data[user?.role];
+  if (!roleData) {
+    redirect("/login"); // Redirect if role is invalid
+  }
+
+  const isActive = (currentPath, url) => currentPath === url;
 
   return (
-    <Sidebar {...props}>
+    <Sidebar>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -146,7 +109,7 @@ export function AppSidebar({ ...props }) {
                       platform
                     </span>
                   </span>
-                  <span className="">v1.0.0</span>
+                  <span>v1.0.0</span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -156,7 +119,7 @@ export function AppSidebar({ ...props }) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {data.navMain.map((item) => (
+            {roleData.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
                   <a href={item.url} className="font-medium">
@@ -165,14 +128,21 @@ export function AppSidebar({ ...props }) {
                 </SidebarMenuButton>
                 {item.items?.length ? (
                   <SidebarMenuSub>
-                    {item.items.map((item) => (
-                      <SidebarMenuSubItem key={item.title}>
+                    {item.items.map((subItem) => (
+                      <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton
                           asChild
-                          isActive={isActive(item.url)}
-                          className={isActive(item.url) ? "bg-secondary " : ""}
+                          isActive={isActive(
+                            window.location.pathname,
+                            subItem.url
+                          )}
+                          className={
+                            isActive(window.location.pathname, subItem.url)
+                              ? "bg-secondary"
+                              : ""
+                          }
                         >
-                          <a href={item.url}>{item.title}</a>
+                          <a href={subItem.url}>{subItem.title}</a>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
@@ -188,7 +158,7 @@ export function AppSidebar({ ...props }) {
           onClick={() => {
             document.cookie =
               "userToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"; // Remove the cookie
-            handleRefresh(); // Redirect to home
+            redirect("/");
           }}
         >
           <LogOut /> Sign out

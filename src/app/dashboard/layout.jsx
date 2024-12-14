@@ -1,4 +1,3 @@
-"use client";
 import "../globals.css";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -37,4 +36,4 @@ function RootLayout({ children }) {
   );
 }
 
-export default withAuth(RootLayout);
+export default RootLayout;
