@@ -1,5 +1,5 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+"use client";
+import * as React from "react";
 import { GraduationCap, LogOut } from "lucide-react";
 
 import {
@@ -16,40 +16,134 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/app/components/ui/button";
+
+// Utility function to get cookies by name
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    const cookieValue = parts.pop().split(";").shift();
+    try {
+      return JSON.parse(cookieValue); // Parse the cookie value as JSON
+    } catch (e) {
+      return null; // In case the cookie is not a valid JSON
+    }
+  }
+  return null;
+};
+
+// const data = {
+//   navMain: [
+//     {
+//       title: "Management",
+//       items: [
+//         {
+//           title: "Overview",
+//           url: "/dashboard/home",
+//         },
+//         {
+//           title: "Manage Filieres",
+//           url: "/dashboard/manage-filieres",
+//         },
+//         {
+//           title: "Manage Matieres",
+//           url: "/dashboard/manage-matieres",
+//         },
+//         {
+//           title: "Manage Rooms",
+//           url: "/dashboard/manage-rooms",
+//         },
+//       ],
+//     },
+//     {
+//       title: "Operations",
+//       items: [
+//         {
+//           title: "Reservation Requests",
+//           url: "/rr",
+//         },
+//       ],
+//     },
+//     {
+//       title: "User",
+//       items: [
+//         {
+//           title: "My Reservations",
+//           url: "/r",
+//         },
+//         {
+//           title: "Notifications",
+//           url: "/n",
+//         },
+//       ],
+//     },
+//   ],
+// };
 
 const data = {
   RespoSalles: [
     {
       title: "Management",
       items: [
-        { title: "Overview", url: "/dashboard/home" },
-        { title: "Manage Rooms", url: "/dashboard/manage-rooms" },
+        {
+          title: "Overview",
+          url: "/dashboard/home",
+        },
+        {
+          title: "Manage Rooms",
+          url: "/dashboard/manage-rooms",
+        },
       ],
     },
     {
       title: "User",
-      items: [{ title: "Notifications", url: "/dashboard/notifications" }],
+      items: [
+        {
+          title: "Notifications",
+          url: "/dashboard/notifications",
+        },
+      ],
     },
   ],
   Coordinateur: [
     {
       title: "Management",
       items: [
-        { title: "Overview", url: "/dashboard/home" },
-        { title: "Manage Filieres", url: "/dashboard/manage-filieres" },
-        { title: "Manage Matieres", url: "/dashboard/manage-matieres" },
+        {
+          title: "Overview",
+          url: "/dashboard/home",
+        },
+        {
+          title: "Manage Filieres",
+          url: "/dashboard/manage-filieres",
+        },
+        {
+          title: "Manage Matieres",
+          url: "/dashboard/manage-matieres",
+        },
       ],
     },
     {
       title: "User",
-      items: [{ title: "Notifications", url: "/dashboard/notifications" }],
+      items: [
+        {
+          title: "Notifications",
+          url: "/dashboard/notifications",
+        },
+      ],
     },
   ],
   Professeur: [
     {
       title: "Management",
-      items: [{ title: "Overview", url: "/dashboard/home" }],
+      items: [
+        {
+          title: "Overview",
+          url: "/dashboard/home",
+        },
+      ],
     },
     {
       title: "Operations",
@@ -62,37 +156,43 @@ const data = {
     },
     {
       title: "User",
-      items: [{ title: "Notifications", url: "/dashboard/notifications" }],
+      items: [
+        {
+          title: "Notifications",
+          url: "/dashboard/notifications",
+        },
+      ],
     },
   ],
 };
 
-export async function AppSidebar() {
-  // Await the cookies API to read the cookie value
-  const cookieStore = cookies();
-  const token = await cookieStore.get("userToken");
+export function AppSidebar({ ...props }) {
+  const router = usePathname();
+  const out = useRouter();
+  const [user, setUser] = React.useState(null);
 
-  // Redirect to login if no token exists
-  if (!token) {
-    redirect("/login");
-  }
+  // Check for user token in cookies and update user state
+  React.useEffect(() => {
+    const userToken = getCookie("userToken"); // Read user token from cookies
+    if (userToken) {
+      setUser(userToken); // Set user data if token is found
+    } else {
+      out.push("/login"); // Redirect to login if no user token
+    }
+  }, [out]);
 
-  let user;
-  try {
-    user = JSON.parse(token.value); // Parse user data
-  } catch {
-    redirect("/login"); // Redirect if token parsing fails
-  }
+  const handleRefresh = () => {
+    out.push("/"); // Reload the page
+  };
 
-  const roleData = data[user?.role];
-  if (!roleData) {
-    redirect("/login"); // Redirect if role is invalid
-  }
-
-  const isActive = (currentPath, url) => currentPath === url;
+  const isActive = (url) => {
+    const currentPathSegment = router.split("/")[2] || "";
+    const targetPathSegment = url.split("/")[2] || "";
+    return currentPathSegment === targetPathSegment;
+  };
 
   return (
-    <Sidebar>
+    <Sidebar {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -109,7 +209,7 @@ export async function AppSidebar() {
                       platform
                     </span>
                   </span>
-                  <span>v1.0.0</span>
+                  <span className="">v1.0.0</span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -119,37 +219,87 @@ export async function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {roleData.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url} className="font-medium">
-                    {item.title}
-                  </a>
-                </SidebarMenuButton>
-                {item.items?.length ? (
-                  <SidebarMenuSub>
-                    {item.items.map((subItem) => (
-                      <SidebarMenuSubItem key={subItem.title}>
-                        <SidebarMenuSubButton
-                          asChild
-                          isActive={isActive(
-                            window.location.pathname,
-                            subItem.url
-                          )}
-                          className={
-                            isActive(window.location.pathname, subItem.url)
-                              ? "bg-secondary"
-                              : ""
-                          }
-                        >
-                          <a href={subItem.url}>{subItem.title}</a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                ) : null}
-              </SidebarMenuItem>
-            ))}
+            {user?.role === "RESPONSABLE_SALLES" &&
+              data.RespoSalles.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url} className="font-medium">
+                      {item.title}
+                    </a>
+                  </SidebarMenuButton>
+                  {item.items?.length ? (
+                    <SidebarMenuSub>
+                      {item.items.map((item) => (
+                        <SidebarMenuSubItem key={item.title}>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={isActive(item.url)}
+                            className={
+                              isActive(item.url) ? "bg-secondary " : ""
+                            }
+                          >
+                            <a href={item.url}>{item.title}</a>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  ) : null}
+                </SidebarMenuItem>
+              ))}
+            {user?.role == "COORDINATEUR" &&
+              data.Coordinateur.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url} className="font-medium">
+                      {item.title}
+                    </a>
+                  </SidebarMenuButton>
+                  {item.items?.length ? (
+                    <SidebarMenuSub>
+                      {item.items.map((item) => (
+                        <SidebarMenuSubItem key={item.title}>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={isActive(item.url)}
+                            className={
+                              isActive(item.url) ? "bg-secondary " : ""
+                            }
+                          >
+                            <a href={item.url}>{item.title}</a>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  ) : null}
+                </SidebarMenuItem>
+              ))}
+            {user?.role == "PROFESSEUR" &&
+              data.Professeur.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url} className="font-medium">
+                      {item.title}
+                    </a>
+                  </SidebarMenuButton>
+                  {item.items?.length ? (
+                    <SidebarMenuSub>
+                      {item.items.map((item) => (
+                        <SidebarMenuSubItem key={item.title}>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={isActive(item.url)}
+                            className={
+                              isActive(item.url) ? "bg-secondary " : ""
+                            }
+                          >
+                            <a href={item.url}>{item.title}</a>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  ) : null}
+                </SidebarMenuItem>
+              ))}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
@@ -158,7 +308,7 @@ export async function AppSidebar() {
           onClick={() => {
             document.cookie =
               "userToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"; // Remove the cookie
-            redirect("/");
+            handleRefresh(); // Redirect to home
           }}
         >
           <LogOut /> Sign out

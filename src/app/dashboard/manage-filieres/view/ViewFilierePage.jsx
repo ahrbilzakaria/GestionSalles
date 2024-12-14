@@ -44,6 +44,7 @@ import { ChargeHoraireCard } from "./ChargeHoraireCard";
 import { TableFiliere } from "./TableFiliere";
 import { getAllEmploisDuTemps } from "@/app/api/emploi";
 import { ManageTable } from "./ManageTable";
+import { TextGenerateEffect } from "@/components/text-generate";
 
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;

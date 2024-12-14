@@ -33,12 +33,21 @@ export function middleware(request) {
       ]),
     };
 
-    // Get the requested path
+    // Get the requested path (without query parameters)
     const pathname = new URL(request.url).pathname;
 
-    // Check access for the user's role
+    // Check access for the user's role for exact paths
     if (!allowedPaths[user.role]?.has(pathname)) {
-      return NextResponse.rewrite(new URL("/404", request.url));
+      // If the role is not authorized for the requested path, check if it's a subpath.
+      // We match sub-paths using a wildcard, allowing roles to access paths that start with a specific segment.
+      const allowedSubpaths = [...allowedPaths[user.role]];
+      const isSubPathAllowed = allowedSubpaths.some((path) =>
+        pathname.startsWith(path)
+      );
+
+      if (!isSubPathAllowed) {
+        return NextResponse.rewrite(new URL("/404", request.url)); // Not allowed, show 404 page
+      }
     }
 
     // Authorized, proceed with the request
@@ -50,5 +59,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: "/dashboard/:path*", // Apply middleware to dashboard routes
+  matcher: "/dashboard/:path*", // Apply middleware to dashboard routes, including all sub-paths
 };

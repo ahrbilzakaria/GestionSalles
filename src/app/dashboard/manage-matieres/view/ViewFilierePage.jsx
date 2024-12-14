@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { getFilier } from "@/app/api/filieres";
+import { TextGenerateEffect } from "@/components/text-generate";
 
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
