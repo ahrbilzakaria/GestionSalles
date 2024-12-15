@@ -88,7 +88,7 @@ const ActionsCell = ({ filiere }) => {
 export const columns = [
   {
     accessorKey: "name",
-    header: "Filière Name",
+    header: "Matiere Name",
   },
   {
     id: "actions",

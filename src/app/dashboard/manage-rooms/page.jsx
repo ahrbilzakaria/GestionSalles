@@ -138,6 +138,7 @@ export default function Home() {
       router.push("/login");
     } else {
       loadSalles();
+      setIsAdded(false)
     }
   }, [isAdded, router]);
 

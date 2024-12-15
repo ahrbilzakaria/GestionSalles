@@ -83,54 +83,14 @@ export default function Home() {
     }
   };
 
-  // const getFreeRooms = async (currentDay, currentWeek) => {
-  //   try {
-  //     if (!currentWeek || !currentDay) {
-  //       return;
-  //     }
-  //     console.log(currentDay, currentWeek);
-  //     const payload1 = {
-  //       day: currentDay,
-  //       week: currentWeek,
-  //       seance: "SEANCE_1",
-  //     };
-
-  //     const rooms1 = await getFreeSallePerDayAndWeekAndSceance(payload1);
-  //     setRooms1(rooms1);
-  //     const payload2 = {
-  //       day: currentDay,
-  //       week: currentWeek,
-  //       seance: "SEANCE_2",
-  //     };
-  //     const rooms2 = await getFreeSallePerDayAndWeekAndSceance(payload2);
-  //     setRooms2(rooms2);
-  //     const payload3 = {
-  //       day: currentDay,
-  //       week: currentWeek,
-  //       seance: "SEANCE_3",
-  //     };
-  //     const rooms3 = await getFreeSallePerDayAndWeekAndSceance(payload3);
-  //     setRooms3(rooms3);
-  //     const payload4 = {
-  //       day: currentDay,
-  //       week: currentWeek,
-  //       seance: "SEANCE_4",
-  //     };
-  //     const rooms4 = await getFreeSallePerDayAndWeekAndSceance(payload4);
-  //     setRooms4(rooms4);
-  //   } catch (e) {
-  //     console.error("Error fetching free rooms:", e);
-  //   }
-  // };
-
   const getFreeRooms = async (currentDay, currentWeek) => {
     try {
-      // if (!currentWeek || !currentDay) {
-      //   return;
-      // }
+      if (!currentWeek || !currentDay) {
+        return;
+      }
       console.log(currentDay, currentWeek);
       const payload1 = {
-        day: "LUNDI",
+        day: currentDay,
         week: currentWeek,
         seance: "SEANCE_1",
       };
@@ -138,21 +98,21 @@ export default function Home() {
       const rooms1 = await getFreeSallePerDayAndWeekAndSceance(payload1);
       setRooms1(rooms1);
       const payload2 = {
-        day: "LUNDI",
+        day: currentDay,
         week: currentWeek,
         seance: "SEANCE_2",
       };
       const rooms2 = await getFreeSallePerDayAndWeekAndSceance(payload2);
       setRooms2(rooms2);
       const payload3 = {
-        day: "LUNDI",
+        day: currentDay,
         week: currentWeek,
         seance: "SEANCE_3",
       };
       const rooms3 = await getFreeSallePerDayAndWeekAndSceance(payload3);
       setRooms3(rooms3);
       const payload4 = {
-        day: "LUNDI",
+        day: currentDay,
         week: currentWeek,
         seance: "SEANCE_4",
       };
@@ -162,6 +122,46 @@ export default function Home() {
       console.error("Error fetching free rooms:", e);
     }
   };
+
+  // const getFreeRooms = async (currentDay, currentWeek) => {
+  //   try {
+  //     // if (!currentWeek || !currentDay) {
+  //     //   return;
+  //     // }
+  //     console.log(currentDay, currentWeek);
+  //     const payload1 = {
+  //       day: "LUNDI",
+  //       week: currentWeek,
+  //       seance: "SEANCE_1",
+  //     };
+
+  //     const rooms1 = await getFreeSallePerDayAndWeekAndSceance(payload1);
+  //     setRooms1(rooms1);
+  //     const payload2 = {
+  //       day: "LUNDI",
+  //       week: currentWeek,
+  //       seance: "SEANCE_2",
+  //     };
+  //     const rooms2 = await getFreeSallePerDayAndWeekAndSceance(payload2);
+  //     setRooms2(rooms2);
+  //     const payload3 = {
+  //       day: "LUNDI",
+  //       week: currentWeek,
+  //       seance: "SEANCE_3",
+  //     };
+  //     const rooms3 = await getFreeSallePerDayAndWeekAndSceance(payload3);
+  //     setRooms3(rooms3);
+  //     const payload4 = {
+  //       day: "LUNDI",
+  //       week: currentWeek,
+  //       seance: "SEANCE_4",
+  //     };
+  //     const rooms4 = await getFreeSallePerDayAndWeekAndSceance(payload4);
+  //     setRooms4(rooms4);
+  //   } catch (e) {
+  //     console.error("Error fetching free rooms:", e);
+  //   }
+  // };
   const getTotalSpecialties = async () => {
     try {
       const specialties = await getAllFiliers();

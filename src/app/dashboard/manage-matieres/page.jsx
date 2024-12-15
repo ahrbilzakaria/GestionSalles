@@ -173,13 +173,13 @@ export default function Home() {
               </Sheet>
             </CardHeader>
 
-            <CardContent className="max-h-screen overflow-y-auto">
+            <CardContent className="max-h-[28rem] overflow-y-auto">
               <div className="mt-4 max-w-sm mb-6">
                 <div className="flex items-center bg-white border  ">
                   <Search className="ml-3 mr-3 text-muted-foreground" />
                   <Input
                     type="text"
-                    placeholder="Search Salle..."
+                    placeholder="Search Matiere..."
                     value={searchQuery}
                     onChange={handleSearch}
                     className="w-full py-3 pl-3 border-none shadow-none"
