@@ -45,7 +45,11 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { StudyWeekPicker } from "./studyWeekPicker";
 import { getAllSalles } from "@/app/api/rooms";
-import { addReservation, getAllReservations } from "@/app/api/reservations";
+import {
+  addReservation,
+  getAllReservations,
+  getCurrentWeek,
+} from "@/app/api/reservations";
 import { TableProf } from "./TableProf";
 import { getEmploisDuTempsByProfesseurId } from "@/app/api/emploi";
 
@@ -81,6 +85,22 @@ export default function Home() {
   const [weekDate, setWeekDate] = useState();
   const [show, isShow] = useState(false);
   const [timeTable, setTimeTable] = useState();
+  const [currentWeek, setCurrentWeek] = useState();
+
+  const loadWeek = async () => {
+    try {
+      // Get the current week string, e.g., "WEEK_1"
+      const currentWeek = await getCurrentWeek();
+
+      // Extract just the week number from "WEEK_1" -> "1"
+      const weekNumber = currentWeek.split("_")[1];
+
+      // Set the current week state with the extracted week number
+      setCurrentWeek(weekNumber);
+    } catch (error) {
+      console.error("Error loading the week:", error);
+    }
+  };
   const loadTimeTable = async (id) => {
     try {
       const profTimeTable = await getEmploisDuTempsByProfesseurId(id);
@@ -206,13 +226,22 @@ export default function Home() {
     } else {
       loadFiliers();
       loadSalles();
+      loadWeek();
     }
   }, [isAdded, router]);
 
   return (
     <div>
       <div className="flex flex-1 flex-col gap-4 p-4">
-        <h1 className="font-bold text-3xl">Reservations:</h1>
+        <div className="w-full gap-2 flex justify-between items-baseline">
+          <h1 className="font-bold text-3xl">Reservations:</h1>
+          {currentWeek && (
+            <div>
+              Current Week:{" "}
+              <span className="p-2  bg-black text-white">{currentWeek}</span>
+            </div>
+          )}
+        </div>
 
         <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
           {/* DataTable for Filiere */}

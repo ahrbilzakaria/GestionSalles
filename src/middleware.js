@@ -18,19 +18,16 @@ export function middleware(request) {
       RESPONSABLE_SALLES: new Set([
         "/dashboard/home",
         "/dashboard/manage-rooms",
-        "/dashboard/notifications",
       ]),
       COORDINATEUR: new Set([
         "/dashboard/home",
         "/dashboard/manage-filieres",
         "/dashboard/manage-matieres",
-        "/dashboard/notifications",
       ]),
       PROFESSEUR: new Set([
         "/dashboard/home",
         "/dashboard/reservations",
         "/dashboard/liberations",
-        "/dashboard/notifications",
       ]),
     };
 

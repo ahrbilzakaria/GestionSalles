@@ -1,5 +1,6 @@
 "use client";
-import { deleteReservation } from "@/app/api/reservations";
+import { deleteLiberation } from "@/app/api/liberation";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,10 +21,10 @@ const ActionsCell = ({ filiere }) => {
 
   const handleDelete = async () => {
     try {
-      await deleteReservation(filiere.id); // Call the delete API function
+      await deleteLiberation(filiere.id); // Call the delete API function
       toast({
         title: "Done!",
-        description: "Reservation deleted successfully!",
+        description: "Liberation deleted successfully!",
       });
       location.reload();
     } catch (error) {
@@ -50,7 +51,7 @@ const ActionsCell = ({ filiere }) => {
             </AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the
-              reservation.
+              liberation.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

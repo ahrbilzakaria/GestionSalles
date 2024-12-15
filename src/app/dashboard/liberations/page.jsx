@@ -40,12 +40,10 @@ import { DataTable } from "./data-table";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Plus, Search, Timer, Trash, X } from "lucide-react";
+import { Plus, Timer, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
 import { StudyWeekPicker } from "./studyWeekPicker";
-import { getAllSalles } from "@/app/api/rooms";
-import { addReservation, getAllReservations } from "@/app/api/reservations";
+import { getCurrentWeek } from "@/app/api/reservations";
 import { TableProf } from "./TableProf";
 import { getEmploisDuTempsByProfesseurId } from "@/app/api/emploi";
 import {
@@ -72,8 +70,8 @@ export default function Home() {
   const [isAdded, setIsAdded] = useState(false);
   const { toast } = useToast();
   const [filteredLiberations, setFilteredLiberations] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [weekDate, setWeekDate] = useState();
+  const [currentWeek, setCurrentWeek] = useState();
   const [show, isShow] = useState(false);
   const [timeTable, setTimeTable] = useState();
   const [liberations, setLiberations] = useState();
@@ -93,19 +91,19 @@ export default function Home() {
     setWeekDate(weekdata);
   };
 
-  // Function to load filieres data
+  const loadWeek = async () => {
+    try {
+      // Get the current week string, e.g., "WEEK_1"
+      const currentWeek = await getCurrentWeek();
 
-  const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
+      // Extract just the week number from "WEEK_1" -> "1"
+      const weekNumber = currentWeek.split("_")[1];
 
-    setFilteredLiberations(
-      liberations.filter((liberation) => {
-        return Object.values(liberation).some((value) =>
-          String(value).toLowerCase().includes(query)
-        );
-      })
-    );
+      // Set the current week state with the extracted week number
+      setCurrentWeek(weekNumber);
+    } catch (error) {
+      console.error("Error loading the week:", error);
+    }
   };
 
   const handleLiberation = async () => {
@@ -146,6 +144,7 @@ export default function Home() {
     try {
       const liberationsData = await getLiberationsByProfesseurId(id);
       setLiberations(liberationsData); // Set the fetched filieres to the state
+      setFilteredLiberations(liberationsData); // Set the filtered liberations to the state
       console.log(liberationsData);
     } catch (error) {
       console.error("Error fetching professeur's liberations:", error);
@@ -160,12 +159,21 @@ export default function Home() {
       loadTimeTable(token.id);
       loadLiberations(token.id);
     }
+    loadWeek();
   }, [isAdded]);
 
   return (
     <div>
       <div className="flex flex-1 flex-col gap-4 p-4">
-        <h1 className="font-bold text-3xl">Liberations:</h1>
+        <div className="w-full gap-2 flex justify-between items-baseline">
+          <h1 className="font-bold text-3xl">Liberations:</h1>
+          {currentWeek && (
+            <div>
+              Current Week:{" "}
+              <span className="p-2  bg-black text-white">{currentWeek}</span>
+            </div>
+          )}
+        </div>
 
         <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
           {/* DataTable for Filiere */}
@@ -195,12 +203,12 @@ export default function Home() {
                 <Sheet>
                   <SheetTrigger className="w-fit" asChild>
                     <Button variant="outline">
-                      <Plus /> Free Reservation
+                      <Plus /> Liberation
                     </Button>
                   </SheetTrigger>
                   <SheetContent side={"top"}>
                     <SheetHeader>
-                      <SheetTitle>Free Reservation:</SheetTitle>
+                      <SheetTitle>Liberation:</SheetTitle>
                       <SheetDescription>
                         Click free when you are done.
                       </SheetDescription>
@@ -232,7 +240,7 @@ export default function Home() {
                     <SheetFooter>
                       <SheetClose asChild>
                         <Button onClick={handleLiberation} type="submit">
-                          <Trash /> Free
+                          <Plus /> Liberer
                         </Button>
                       </SheetClose>
                     </SheetFooter>
@@ -242,7 +250,7 @@ export default function Home() {
             </CardHeader>
 
             <CardContent className=" overflow-y-auto">
-              <DataTable columns={columns} data={liberations} />
+              <DataTable columns={columns} data={filteredLiberations} />
               {show ? <TableProf timeTableData={timeTable}></TableProf> : ""}
             </CardContent>
           </Card>

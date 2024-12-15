@@ -97,15 +97,6 @@ const data = {
         },
       ],
     },
-    {
-      title: "User",
-      items: [
-        {
-          title: "Notifications",
-          url: "/dashboard/notifications",
-        },
-      ],
-    },
   ],
   Coordinateur: [
     {
@@ -122,15 +113,6 @@ const data = {
         {
           title: "Manage Matieres",
           url: "/dashboard/manage-matieres",
-        },
-      ],
-    },
-    {
-      title: "User",
-      items: [
-        {
-          title: "Notifications",
-          url: "/dashboard/notifications",
         },
       ],
     },
@@ -158,20 +140,12 @@ const data = {
         },
       ],
     },
-    {
-      title: "User",
-      items: [
-        {
-          title: "Notifications",
-          url: "/dashboard/notifications",
-        },
-      ],
-    },
   ],
 };
 
 export function AppSidebar({ ...props }) {
   const router = usePathname();
+  const out = useRouter();
   const [user, setUser] = React.useState(null);
 
   // Check for user token in cookies and update user state
@@ -179,8 +153,10 @@ export function AppSidebar({ ...props }) {
     const userToken = getCookie("userToken"); // Read user token from cookies
     if (userToken) {
       setUser(userToken); // Set user data if token is found
+    } else {
+      out.push("/login"); // Redirect to login if no user token
     }
-  }, []);
+  }, [out]);
 
   const handleRefresh = () => {
     out.push("/"); // Reload the page

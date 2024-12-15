@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosGenInstance from "./services/axiosGenInstance";
 
 // Fetch all salles
@@ -33,6 +34,24 @@ export const addSalle = async (payload) => {
     return response.data;
   } catch (error) {
     console.error("Error adding salle:", error);
+    throw error;
+  }
+};
+
+export const getFreeSallePerDayAndWeekAndSceance = async (payload) => {
+  try {
+    const response = await axiosGenInstance.post(
+      "/salles/free-day-week-seance",
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching free salles:", error);
     throw error;
   }
 };

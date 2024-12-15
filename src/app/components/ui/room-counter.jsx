@@ -9,26 +9,28 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export function RoomCounter({ comment, title, totalRooms, duration = 2000 }) {
+export function RoomCounter({ comment, title, totalRooms, duration = 1000 }) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    let start = 0;
-    const end = totalRooms;
-    const incrementTime = duration / end;
-    let timer;
+    if (totalRooms) {
+      let start = 0;
+      const end = totalRooms;
+      const incrementTime = duration / end;
+      let timer;
 
-    const updateCount = () => {
-      start += 1;
-      setCount(start);
-      if (start === end) {
-        clearInterval(timer);
-      }
-    };
+      const updateCount = () => {
+        start += 1;
+        setCount(start);
+        if (start === end) {
+          clearInterval(timer);
+        }
+      };
 
-    timer = setInterval(updateCount, incrementTime);
+      timer = setInterval(updateCount, incrementTime);
 
-    return () => clearInterval(timer);
+      return () => clearInterval(timer);
+    }
   }, [totalRooms, duration]);
 
   return (
