@@ -35,7 +35,7 @@ export default function Nav() {
   };
 
   return (
-    <div className="w-full flex justify-between px-4 py-2">
+    <div className=" flex justify-between px-4 py-2 relative z-10 w-[90%] m-auto">
       <div className="font-bold text-xl">G-SALLES</div>
       <div className="flex gap-3">
         {isAuthorized ? (
